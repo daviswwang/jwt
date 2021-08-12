@@ -8,7 +8,7 @@
 
 namespace Daviswwang\JWT\Middleware;
 
-use App\Exceptions\AuthException;
+use Daviswwang\JWT\Exception\AuthException;
 use Closure;
 use Illuminate\Http\Request;
 use Daviswwang\JWT\JWT;
