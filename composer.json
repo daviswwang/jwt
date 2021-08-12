@@ -1,0 +1,42 @@
+{
+    "name": "daviswwang/jwt",
+    "description": "laravel jwt",
+    "type": "library",
+    "license": "MIT",
+    "keywords": [
+        'jwt',
+        "php",
+        "laravel"
+    ],
+    "authors": [
+        {
+            "name": "daviswwang",
+            "email": "130086230@qq.com",
+            "homepage": "https://github.com/daviswwang/jwt"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Daviswwang\\JWT\\": "src/"
+        }
+    },
+    "autoload-dev": {},
+    "require": {
+        "php": ">=7.2",
+        "ext-swoole": ">=4.4",
+        "lcobucci/jwt": "~3.3.0",
+        "nesbot/carbon": "^1.0 || ^2.0"
+    },
+    "require-dev": {},
+    "config": {
+        "sort-packages": true
+    },
+    "scripts": {},
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Daviswwang\\JWT\\LaravelServiceProvider"
+            ]
+        }
+    }
+}
