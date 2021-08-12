@@ -9,6 +9,7 @@
 namespace Daviswwang\JWT;
 
 use Illuminate\Support\ServiceProvider;
+use Psr\Container\ContainerInterface;
 
 
 class LaravelServiceProvider extends ServiceProvider
@@ -19,7 +20,7 @@ class LaravelServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton(JWT::class, function () {
-            return new JWT();
+            return new JWT(ContainerInterface::class, BlackList::class);
         });
         $this->app->alias(JWT::class, 'jwt');
     }
