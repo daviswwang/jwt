@@ -19,8 +19,8 @@ class LaravelServiceProvider extends ServiceProvider
 
     public function register()
     {
-        $this->app->singleton(JWT::class, function () {
-            return new JWT(ContainerInterface::class, BlackList::class);
+        $this->app->singleton(JWT::class, function ($app) {
+            return new JWT($app, (new BlackList($app)));
         });
         $this->app->alias(JWT::class, 'jwt');
     }
