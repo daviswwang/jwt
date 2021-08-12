@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 namespace Daviswwang\JWT;
 
 use Lcobucci\JWT\Token;
@@ -10,7 +9,6 @@ use Psr\SimpleCache\CacheInterface;
 
 /**
  * https://github.com/daviswwang/jwt
- * author LI Yuzhao <562405704@qq.com>
  */
 class BlackList extends AbstractJWT
 {
@@ -25,12 +23,6 @@ class BlackList extends AbstractJWT
         $this->cache = $this->getContainer()->get(CacheInterface::class);
     }
 
-    /**
-     * 把token加入到黑名单中
-     * @param Token $token
-     * @return mixed
-     * @throws \Psr\SimpleCache\InvalidArgumentException
-     */
     public function addTokenBlack(Token $token, array $config = [], $ssoSelfExp = false)
     {
         $claims = JWTUtil::claimsToArray($token->getClaims());
@@ -46,11 +38,6 @@ class BlackList extends AbstractJWT
         return $claims;
     }
 
-    /**
-     * Get the number of seconds until the token expiry.
-     *
-     * @return int
-     */
     protected function getSecondsUntilExpired($claims, array $config)
     {
         $exp = TimeUtil::timestamp($claims['exp']);
@@ -62,12 +49,6 @@ class BlackList extends AbstractJWT
         return $exp->max($iat->addSeconds($config['blacklist_cache_ttl']))->diffInSeconds();
     }
 
-    /**
-     * Get the timestamp when the blacklist comes into effect
-     * This defaults to immediate (0 seconds).
-     *
-     * @return int
-     */
     protected function getGraceTimestamp($claims, array $config)
     {
         $loginType = $config['login_type'];
@@ -76,12 +57,6 @@ class BlackList extends AbstractJWT
         return TimeUtil::timestamp($claims['iat'])->addSeconds($gracePeriod)->getTimestamp();
     }
 
-    /**
-     * 判断token是否已经加入黑名单
-     * @param $claims
-     * @return bool
-     * @throws \Psr\SimpleCache\InvalidArgumentException
-     */
     public function hasTokenBlack($claims, array $config = [])
     {
         $cacheKey = $this->getCacheKey($claims['jti']);
@@ -102,12 +77,6 @@ class BlackList extends AbstractJWT
         return false;
     }
 
-    /**
-     * 黑名单移除token
-     * @param $key  token 中的jit
-     * @return bool
-     * @throws \Psr\SimpleCache\InvalidArgumentException
-     */
     public function remove($key)
     {
         return $this->cache->delete($key);
@@ -115,8 +84,6 @@ class BlackList extends AbstractJWT
 
     /**
      * 移除所有的token缓存
-     * @return bool
-     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function clear()
     {
@@ -124,21 +91,12 @@ class BlackList extends AbstractJWT
         return $this->cache->delete("{$cachePrefix}.*");
     }
 
-    /**
-     * @param string $jti
-     * @return string
-     */
     private function getCacheKey(string $jti)
     {
         $config = $this->getSceneConfig($this->getScene());
         return "{$config['blacklist_prefix']}_" . $jti;
     }
 
-    /**
-     * Get the cache time limit.
-     *
-     * @return int
-     */
     public function getCacheTTL()
     {
         return $this->getSceneConfig($this->getScene())['ttl'];

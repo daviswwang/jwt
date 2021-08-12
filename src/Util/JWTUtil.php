@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 namespace Daviswwang\JWT\Util;
 use Lcobucci\JWT\Builder;
 use Lcobucci\JWT\Claim\Factory as ClaimFactory;
@@ -10,9 +9,9 @@ use Lcobucci\JWT\ValidationData;
 
 /**
  * Created by PhpStorm.
- * User: liyuzhao
- * Date: 2020/4/21
- * Time: 1:51 下午
+ * User: fanxinyu
+ * Date: 2021-08-12
+ * Time: 11:02
  */
 class JWTUtil
 {

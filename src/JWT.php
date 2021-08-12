@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 namespace Daviswwang\JWT;
 use Lcobucci\JWT\Signer;
@@ -12,10 +11,8 @@ use Psr\Container\ContainerInterface;
 use Illuminate\Http\Request;
 
 /**
- * Created by PhpStorm.
- * User: liyuzhao
- * Date: 2020/4/21
- * Time: 1:36 下午
+ * Class JWT
+ * @package Daviswwang\JWT
  */
 class JWT extends AbstractJWT
 {
@@ -39,10 +36,10 @@ class JWT extends AbstractJWT
     /**
      * 生成token
      * @param array $claims
-     * @param bool $isInsertSsoBlack 是否把单点登录生成的token加入黑名单
-     * @param bool  $isConversionString 是否把token强制转换成string类型
-     * @return Token|string
-     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @param bool $isInsertSsoBlack
+     * @param bool $isConversionString
+     * @return string
+     * @author: fanxinyu
      */
     public function getToken(array $claims, $isInsertSsoBlack = true, $isConversionString = true)
     {
@@ -79,16 +76,6 @@ class JWT extends AbstractJWT
         return $isConversionString ? (string)$token : $token;
     }
 
-    /**
-     * 验证token
-     * @param string|null $token
-     * @param bool        $validate
-     * @param bool        $verify
-     * @param bool        $independentTokenVerify true时会验证当前场景配置是否是生成当前的token的配置，需要配合自定义中间件实现，false会根据当前token拿到原来的场景配置，并且验证当前token
-     * @return bool
-     * @throws \Psr\SimpleCache\InvalidArgumentException
-     * @throws \Throwable
-     */
     public function checkToken(string $token = null, $validate = true, $verify = true, $independentTokenVerify = false)
     {
         try {
@@ -111,11 +98,6 @@ class JWT extends AbstractJWT
         return true;
     }
 
-    /**
-     * 刷新token
-     * @return Token
-     * @throws \Psr\SimpleCache\InvalidArgumentException
-     */
     public function refreshToken(string $token = null)
     {
         if (empty($token)) $token = $this->getHeaderToken();
@@ -128,12 +110,6 @@ class JWT extends AbstractJWT
         return $this->getToken($claims);
     }
 
-    /**
-     * 让token失效
-     * @param string|null $token
-     * @return bool
-     * @throws \Psr\SimpleCache\InvalidArgumentException
-     */
     public function logout(string $token = null)
     {
         if (empty($token)) $token = $this->getHeaderToken();
@@ -145,11 +121,6 @@ class JWT extends AbstractJWT
         return true;
     }
 
-    /**
-     * 获取token动态有效时间
-     * @param string|null $token
-     * @return int|mixed
-     */
     public function getTokenDynamicCacheTime(string $token = null)
     {
         $nowTime = time();
@@ -159,11 +130,6 @@ class JWT extends AbstractJWT
         return $expTime;
     }
 
-    /**
-     * 获取jwt token解析的data
-     * @param string|null $token
-     * @return array
-     */
     public function getParserData(string $token = null)
     {
         $arr = [];
@@ -175,10 +141,6 @@ class JWT extends AbstractJWT
         return $arr;
     }
 
-    /**
-     * 获取缓存时间
-     * @return mixed
-     */
     public function getTTL(string $token = null)
     {
         if (!empty($token)) $config = $this->getSceneConfigByToken($token);
@@ -186,11 +148,6 @@ class JWT extends AbstractJWT
         return (int)$config['ttl'];
     }
 
-    /**
-     * 获取对应算法需要的key
-     * @param string $type 配置keys里面的键，获取私钥或者公钥。private-私钥，public-公钥
-     * @return Key|null
-     */
     private function getKey(array $config, string $type = 'private')
     {
         $key = NULL;
@@ -207,22 +164,11 @@ class JWT extends AbstractJWT
         return $key;
     }
 
-    /**
-     * 获取Token对象
-     * @param string|null $token
-     * @return Token
-     */
     private function getTokenObj(string $token = null)
     {
         return JWTUtil::getParser()->parse($token);
-//        if (!empty(str_replace(' ', '', $token))) return JWTUtil::getParser()->parse($token);
-//        return JWTUtil::getParser()->parse($this->getHeaderToken());
     }
 
-    /**
-     * 获取http头部token
-     * @return bool|mixed|string
-     */
     private function getHeaderToken()
     {
         $token = $this->request->getHeaderLine('Authorization') ?? '';
@@ -231,23 +177,13 @@ class JWT extends AbstractJWT
         return $token;
     }
 
-    /**
-     * 验证jwt token的data部分
-     * @param Token $token token object
-     * @return bool
-     */
     private function validateToken(Token $token, $currentTime = null)
     {
         $data = JWTUtil::getValidationData($currentTime);
         return $token->validate($data);
     }
 
-    /**
-     * 验证 jwt token
-     * @param Token $token token object
-     * @return bool
-     * @throws \Throwable
-     */
+
     private function verifyToken(Token $token, array $config)
     {
         $alg = $token->getHeader('alg');

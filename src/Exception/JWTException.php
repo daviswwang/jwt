@@ -1,9 +1,9 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: liyuzhao
- * Date: 2019-08-01
- * Time: 13:43
+ * User: fanxinyu
+ * Date: 2021-08-12
+ * Time: 11:02
  */
 
 namespace Daviswwang\JWT\Exception;

@@ -1,10 +1,9 @@
 <?php
-declare(strict_types=1);
 /**
  * Created by PhpStorm.
- * User: liyuzhao
- * Date: 2020/4/21
- * Time: 9:17 下午
+ * User: fanxinyu
+ * Date: 2021-08-12
+ * Time: 11:02
  */
 
 namespace Daviswwang\JWT;

@@ -1,6 +1,5 @@
 <?php
 
-declare(strict_types=1);
 
 namespace Daviswwang\JWT;
 
@@ -25,7 +24,7 @@ class ConfigProvider
             'publish' => [
                 [
                     'id' => 'jwt',
-                    'description' => 'jwt-auth',
+                    'description' => 'jwt',
                     'source' => __DIR__ . '/../publish/jwt.php',
                     'destination' => BASE_PATH . '/config/autoload/jwt.php',
                 ],

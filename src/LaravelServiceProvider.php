@@ -2,8 +2,8 @@
 /**
  * Created by PhpStorm.
  * User: fanxinyu
- * Date: 2020-11-13
- * Time: 16:35
+ * Date: 2021-08-12
+ * Time: 11:02
  */
 
 namespace Daviswwang\JWT;

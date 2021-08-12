@@ -5,6 +5,7 @@
  * Date: 2021-08-12
  * Time: 11:02
  */
+
 namespace Daviswwang\JWT\Middleware;
 
 use App\Exceptions\AuthException;
@@ -41,14 +42,16 @@ class AuthMiddleware
         $token = str_replace(self::PREFIX, '', $token);
 
         try {
-            //只在正式环境起效
-            if (env('APP_DEBUG') == 'false') {
-                $this->jwt->checkToken($token);
-            }
+            $this->jwt->checkToken($token);
 
-            $request = $request->offsetSet('user', $this->jwt->getParserData($token));
+            $res = $this->jwt->getParserData($token);
 
-            var_dump($this->jwt->getParserData($token));
+            if (!is_array($res) || !isset($res['user_code'])) throw new AuthException('未解析成功Authorization');
+
+            $request->offsetSet('auth_user_code', $res['user_code'] ?? "");
+            $request->offsetSet('auth_shop_code', $res['shop_code'] ?? '');
+            $request->offsetSet('auth_depart_code', $res['depart_code'] ?? "");
+            $request->offsetSet('auth_user_info', $res);
 
         } catch (\Exception $e) {
             throw new AuthException('无效的鉴权');
