@@ -48,10 +48,11 @@ class AuthMiddleware
 
             if (!is_array($res) || !isset($res['user_code'])) throw new AuthException('未解析成功Authorization');
 
-            $request->offsetSet('auth_user_code', $res['user_code'] ?? "");
-            $request->offsetSet('auth_shop_code', $res['shop_code'] ?? '');
-            $request->offsetSet('auth_depart_code', $res['depart_code'] ?? "");
-            $request->offsetSet('auth_user_info', $res);
+            $request->session()->put('auth_user_code', $res['user_code']);
+
+            $request->session()->put('auth_shop_code', $res['shop_code'] ?? "");
+            $request->session()->put('auth_depart_code', $res['depart_code'] ?? "");
+            $request->session()->put('auth_user_info', $res ?? "");
 
         } catch (\Exception $e) {
             throw new AuthException('无效的鉴权');
